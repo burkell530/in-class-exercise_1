@@ -25,11 +25,9 @@ class ShoppingList {
   void Reset(unsigned int max_items);
 
  private:
-  void initialize(unsigned int inCapacity);
-  void FreeList();
-  string* mitemsArray;
-  unsigned int mlistCapacity;
-  unsigned int mnumberOfItemsOnLIst;
+  string* items_;
+  unsigned int max_items_;
+  unsigned int item_count_;
 };
 
 // For testing (DO NOT ALTER)
@@ -53,63 +51,51 @@ int main() {
   // This ends program execution
   return 0;
 }
-void ShoppingList::initialize(unsigned int inCapacity) {
-  mlistCapacity = inCapacity;
-  mitemsArray = new string[mlistCapacity];
-  mnumberOfItemsOnLIst = 0;    
-}
   /*
    * Default constructor.
-   * Initializes mlistCapacity to 25, mitemsArray to size mlistCapacity
-   * and mnumberOfItemsOnLIst to 0.
+   * Initializes max_items_ to 25, items_ to size max_items_
+   * and item_count_ to 0.
    */
 ShoppingList::ShoppingList() { 
-  initialize(25);
-}
-void ShoppingList::FreeList() {
-  if (mitemsArray != 0) {
-    mitemsArray = 0;
-  }
-}
-
-void ShoppingList::Reset(unsigned int inCapacityOfList) {
-  FreeList();
-  initialize(inCapacityOfList);
+  max_items_ = 25;
+  items_ = new string[max_items_];
+  item_count_ = 0;
 }
 
   /*
    * Overloaded constructor.
-   * Initializes mlistCapacity to max_items, mitemsArray to size max_items
+   * Initializes max_items_ to max_items, items_ to size max_items
    * and item_count to 0.
-   * @param unsigned int max_items - The desired size of the mitemsArray array
+   * @param unsigned int max_items - The desired size of the items_ array
    */
-ShoppingList::ShoppingList(unsigned int inCapacityOfList) {
-  initialize(inCapacityOfList);
+ShoppingList::ShoppingList(unsigned int max_items) {
+  max_items_ = max_items;
+  items_ = new string[max_items];
+  item_count_ = 0;
 }
 
   /*
    * Destructor.
-   * Frees the memory associated with mitemsArray.
+   * Frees the memory associated with items_.
    */
 ShoppingList::~ShoppingList() {
-  FreeList();  
+  delete[] items_;  
 }
 
   /*
-   * Accessor for mlistCapacity
+   * Accessor for max_items_
    * @return unsigned int - The maximum number of items in this ShoppingList
    */
 unsigned int ShoppingList::max_items() const {
-  return mlistCapacity; 
+  return max_items_; 
 }
 
   /*
-   * Accessor for mnumberOfItemsOnLIst
+   * Accessor for item_count_
    * @return unsigned int - The count of number of items in this ShoppingList
    */
 unsigned int ShoppingList::item_count() const {
-//  cout << "returning mnumberOfItemsOnLIst" << mnumberOfItemsOnLIst;
-  return mnumberOfItemsOnLIst;  
+  return max_items_;  
 }
 
   /*
@@ -118,10 +104,9 @@ unsigned int ShoppingList::item_count() const {
    * @param string item - The item to be added to the array
    * @return bool - True if the item can be added, otherwise return false
    */
-bool ShoppingList::AddItem(string inItemToAdd) {
-  if (mnumberOfItemsOnLIst < mlistCapacity) {
-    mitemsArray[mnumberOfItemsOnLIst] = inItemToAdd;
-    mnumberOfItemsOnLIst++;
+bool ShoppingList::AddItem(string item) {
+  if (item_count_ < max_items_) {
+    items_[item_count_] = item;
     return true;
   } else {
     return false;
@@ -137,8 +122,8 @@ bool ShoppingList::AddItem(string inItemToAdd) {
    * @return string - The value of the item at the specified index
    */
 string ShoppingList::GetItem(unsigned int index) const {
-  assert(index >= 0 && index < mnumberOfItemsOnLIst);
-  return mitemsArray[index];
+  assert(index >= 0 && index < item_count_);
+  return items_[index];
 }
 
   /*
@@ -149,10 +134,10 @@ string ShoppingList::GetItem(unsigned int index) const {
    *                             retrieved
    * @return string& - A reference to the value of the item at the specified index
    */
-string& ShoppingList::GetItem(unsigned int index) {
-  assert(index >= 0 && index < mnumberOfItemsOnLIst);
-  return mitemsArray[index];
-}
+  string& ShoppingList::GetItem(unsigned int index) {
+  assert(index >= 0 && index < item_count_);
+  return items_[index];    
+  }
 
   // Why Two GetItem with the same number/type of parameters?
   // http://www.geeksforgeeks.org/function-overloading-and-const-functions/
@@ -162,9 +147,13 @@ string& ShoppingList::GetItem(unsigned int index) {
    * a specified size.
    * The first line of this function is an assertion to check to see if the
    * parameter is greater than 0
-   * @param unsigned int max_items - The desired new max size of mitemsArray
+   * @param unsigned int max_items - The desired new max size of items_
    */
-
+  void ShoppingList::Reset(unsigned int max_items) {
+    if (max_items > 0) {
+      max_items_ =0;
+    }  
+  }
 
 // For testing (DO NOT ALTER)
 void UnitTest(int test) {
